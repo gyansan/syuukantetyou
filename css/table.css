@@ -1,0 +1,33 @@
+/* テーブル用（ID基準にして上書き勝ちにする） */
+#task-display { border-collapse: collapse; width: 100%; max-width: 900px; }
+#task-display th, #task-display td { border: 1px solid #000; padding: 8px; }
+#task-display th { text-align: center; }
+#task-display td { text-align: left; }
+
+#task-display thead th { background: #4a90e2; color: #fff; }
+#task-display tbody tr:nth-child(even) { background: #e6f2ff; }
+#task-display tbody tr:nth-child(odd)  { background: #fff; }
+
+/* 幅 */
+#task-display .col-task     { width: 350px; }
+#task-display .col-start    { width: 70px; }
+#task-display .col-end      { width: 70px; }
+#task-display .col-deadline { width: 100px; }
+#task-display .col-actions  { width: 100px; }
+
+/* ツールチップ */
+#task-display .cell-task { position: relative; }
+#task-display .cell-task[data-note]:hover::after {
+  content: "-memo-\A" attr(data-note);
+  white-space: pre-wrap;
+  position: absolute;
+  left: 220px; bottom: -1px;
+  transform: translateX(-50%) translateY(100%);
+  width: 320px; background: #fff; border: 1px solid #e5e7eb; border-radius: 6px;
+  padding: 8px 10px; box-shadow: 0 6px 16px rgba(0,0,0,.15); z-index: 9999; line-height: 1.4;
+}
+#task-display .cell-task[data-note]:hover::before {
+  content: ""; position: absolute; left: 100%; top: 50%; transform: translate(0,-50%);
+  border: 8px solid transparent; border-left-color: #fff; filter: drop-shadow(-1px 0 0 #e5e7eb);
+  pointer-events: none;
+}

@@ -1,0 +1,41 @@
+/* ナビゲーションバー用CSS */
+
+.sidebar {
+  position: fixed;   /* 固定表示 */
+  top: 0;
+  left: 0;
+  width: 150px;
+  height: 100vh;     /* 縦いっぱい */
+  background-color: #2c3e50;
+  color: white;
+  padding: 20px;
+}
+
+.sidebar h2 {
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  margin: 10px 0;
+}
+
+.sidebar ul li a {
+  color: white;
+  text-decoration: none;
+}
+
+.sidebar ul li a:hover {
+  text-decoration: underline;
+}
+
+/* メインコンテンツ側を右にずらす */
+.main {
+  margin-left: 200px; 
+  padding: 20px;
+}

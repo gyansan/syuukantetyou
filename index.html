@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>習慣手帳</title>
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/buttons.css">
+  <link rel="stylesheet" href="css/taskform.css">
+   <link rel="stylesheet" href="css/table.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- ナビバー -->
+  <div class="sidebar">
+    <h2>メニュー</h2>
+    <ul>
+      <li><a href="#">ホーム</a></li>
+      <li><a href="#">今日のタスク</a></li>
+      <li><a href="#">週の予定</a></li>
+      <li><a href="#">設定</a></li>
+    </ul>
+  </div>
+
+  <!-- メインコンテンツ -->
+  <div class="main">
+    <h1 id="today-todo"></h1>
+
+    <table id="task-display">
+  <thead>
+    <tr>
+      <th class="col-task">タスク</th>
+      <th class="col-start">開始時間</th>
+      <th class="col-end">終了時間</th>
+      <th class="col-deadline">期限</th>
+      <th class="col-actions">操作</th>
+    </tr>
+  </thead>
+  <tbody id="task-tbody"><!-- JSで自動生成 --></tbody>
+</table>
+
+<!-- 行テンプレート -->
+<template id="task-row-template">
+  <tr>
+    <td class="cell-task"></td>
+    <td class="cell-start"></td>
+    <td class="cell-end"></td>
+    <td class="cell-deadline"></td>
+    <td>
+      <button class="btn btn-sm" data-action="edit">編集</button>
+      <button class="btn btn-sm" data-action="delete">完了</button>
+    </td>
+  </tr>
+</template>
+
+    <!-- メッセージ表示エリア -->
+    <div id="task-empty-message" class="empty-message" style="display:none;">
+      タスクを追加しよう！
+    </div>
+
+    <!-- 追加ボタン -->
+    <button class="add-btn" id="add-task">+</button>
+  </div>
+
+
+  <!-- モーダル本体 -->
+  <div id="task-modal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="task-modal-title">
+    <!-- オーバーレイ -->
+    <div class="modal__overlay" data-close-modal></div>
+
+    <!-- コンテンツ -->
+    <div class="modal__content">
+      <header class="modal__header">
+        <h2 id="task-modal-title">タスクを追加</h2>
+        <button type="button" class="modal__close" aria-label="閉じる" data-close-modal>×</button>
+      </header>
+
+      <!-- モーダル内フォーム -->
+      <form id="task-form" class="modal__form">
+        <input type="hidden" name="id"><!-- ★追加 -->
+        <div id="form-error" class="form-error"></div>
+
+        <label>タスク名<input type="text" name="title" required minlength="2" maxlength="50"></label>
+        <div class="grid-3">
+          <label>開始<input type="time" name="startTime" value="09:00"></label>
+          <label>終了<input type="time" name="endTime" value="09:30"></label>
+          <label>期限<input type="date" name="deadline"></label>
+        </div>
+        <label>メモ<textarea name="notes" rows="3"></textarea></label>
+        <footer class="modal__actions">
+          <button type="button" class="btn btn-sm" data-close-modal>キャンセル</button>
+          <button type="submit" class="btn btn-sm" id="task-submit">追加</button> <!-- ★id追加 -->
+        </footer>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/taskRepository.js"></script>
+  <script src="js/index.js"></script>
+  <script src="js/taskForm.js"></script>
+</body>
+</html>
