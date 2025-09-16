@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>習慣手帳</title>
+  <title>毎日タスク</title>
   <!-- CSS -->
   <link rel="stylesheet" href="css/common.css">
   <link rel="stylesheet" href="css/navbar.css">
   <link rel="stylesheet" href="css/buttons.css">
+  <link rel="stylesheet" href="css/table.css">
   <link rel="stylesheet" href="css/taskform.css">
-   <link rel="stylesheet" href="css/table.css">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -26,34 +26,32 @@
 
   <!-- メインコンテンツ -->
   <div class="main">
-    <h1 id="today-todo"></h1>
+    <h1>毎日のタスクを登録しましょう！</h1>
 
-    <table class="table-task" id="task-display">
+    <table class="table-task">
       <thead>
         <tr>
           <th style="width: 350px;">タスク</th>
           <th style="width: 70px;">開始時間</th>
           <th style="width: 70px;">終了時間</th>
-          <th style="width: 100px;">期限</th>
           <th style="width: 100px;">操作</th>
         </tr>
       </thead>
-    <tbody id="task-tbody"><!-- JSで自動生成 --></tbody>
-  </table>
+      <tbody id="task-tbody"><!-- JSで自動生成 --></tbody>
+    </table>
 
-<!-- 行テンプレート -->
-<template id="task-row-template">
-  <tr>
-    <td class="cell-task"></td>
-    <td class="cell-start"></td>
-    <td class="cell-end"></td>
-    <td class="cell-deadline"></td>
-    <td>
-      <button class="btn btn-sm" data-action="edit">編集</button>
-      <button class="btn btn-sm" data-action="complete">完了</button>
-    </td>
-  </tr>
-</template>
+  <!-- 行テンプレート -->
+  <template id="task-row-template">
+    <tr>
+      <td class="cell-task"></td>
+      <td class="cell-start"></td>
+      <td class="cell-end"></td>
+      <td>
+        <button class="btn btn-sm" data-action="edit">編集</button>
+        <button class="btn btn-sm" data-action="delete">削除</button>
+      </td>
+    </tr>
+  </template>
 
     <!-- メッセージ表示エリア -->
     <div id="task-empty-message" class="empty-message" style="display:none;">
@@ -61,7 +59,8 @@
     </div>
 
     <!-- 追加ボタン -->
-    <button class="add-btn" id="add-task" data-repeat="none">+</button>
+    <button class="add-btn" id="add-task" data-repeat="daily">+</button>
+
   </div>
 
 
@@ -73,7 +72,7 @@
     <!-- コンテンツ -->
     <div class="modal__content">
       <header class="modal__header">
-        <h2 id="task-modal-title"></h2>
+        <h2 id="task-modal-title">タスクを追加</h2>
 
         <!-- 繰り返し設定 -->
         <label class="repeat-label">
@@ -149,7 +148,7 @@
           <label id="deadline">期限<input type="date" name="deadline" style="width:45%;"></label>
           <label id="weekly-deadline">
             期限までの日数
-            <select name="weeklyDeadline" style="width:25%;">
+            <select name="Weeklydeadline" style="width:25%;">
               <option value="0">期限なし（当日）</option>
               <option value="1">1日後</option>
               <option value="2">2日後</option>
@@ -205,7 +204,8 @@
   </div>
 
   <script src="js/taskRepository.js"></script>
-  <script src="js/index.js"></script>
   <script src="js/taskForm.js"></script>
+  <script src="js/dailyTaskPage.js"></script>
+
 </body>
 </html>

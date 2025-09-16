@@ -1,89 +1,156 @@
-// js/taskForm.js
-// モジュール無し（import/exportしない）。index.js と同じページで読み込む想定。
+//タスク追加系フォームはここで一元管理する
 
-// ---- 要素参照 ----
-const modalEl   = document.getElementById('task-modal');
-const formEl    = document.getElementById('task-form');
+const modal = document.getElementById("task-modal");
+const form = document.getElementById("task-form");
+const openButton = document.getElementById("add-task");
+const closeButtons = modal.querySelectorAll("[data-close-modal]");
 const titleEl   = document.getElementById('task-modal-title');
-const errorBox  = document.getElementById('form-error');
-const submitBtn = formEl?.querySelector('button[type="submit"]');
+const addButton = document.getElementById("add-task");
+const editButton = document.getElementById("edit-task");
+const errorBox = document.getElementById("form-error");
 
-// ---- 共通UI ----
-function showModal() {
-  modalEl.classList.add('is-active');
-  modalEl.setAttribute('aria-hidden', 'false');
-  const firstInput = modalEl.querySelector('input');
-  if (firstInput) firstInput.focus();
-}
-function hideModal() {
-  modalEl.classList.remove('is-active');
-  modalEl.setAttribute('aria-hidden', 'true');
-  errorBox.textContent = '';
-  formEl.reset();
-  // 編集情報をクリア
-  delete formEl.dataset.mode;
-  delete formEl.dataset.taskId;
-}
+//////////////////////////////////////////////////////////
+//表示処理
 
-// 閉じる（× / キャンセル / オーバーレイ / ESC）
-modalEl.querySelectorAll('[data-close-modal]').forEach(btn =>
-  btn.addEventListener('click', hideModal)
-);
-modalEl.addEventListener('click', (e)=>{
-  if (e.target.classList.contains('modal__overlay')) hideModal();
-});
-document.addEventListener('keydown', (e)=>{
-  if (e.key === 'Escape') hideModal();
-});
+//追加で開く
+addButton.addEventListener("click",()=>{
+  const repeatType = addButton.dataset.repeat;
+  openAddForm(repeatType);
+})
 
-// ---- 追加で開く ----
-function openAddModal(){
-  formEl.reset();
-  formEl.dataset.mode = 'add';
+function openAddForm(repeatType){
+  resetForm();
+  const repeatSelect = document.querySelector('select[name="repeat"]');
+  repeatSelect.value = repeatType;
+  updateRepeatUI(repeatType);
+  form.dataset.mode = 'add';
   titleEl.textContent = 'タスクを追加';
-  if (!formEl.elements.startTime.value) formEl.elements.startTime.value = '09:00';
-  if (!formEl.elements.endTime.value)   formEl.elements.endTime.value   = '09:30';
-  if (submitBtn) submitBtn.textContent = '追加';
-  showModal();
+  modal.classList.add("is-active");
+  modal.setAttribute("aria-hidden", "false");
 }
 
-// ---- 編集で開く ----
-async function openEditModal(taskId){
-  formEl.reset();
-  formEl.dataset.mode = 'edit';
-  formEl.dataset.taskId = String(taskId);
+//編集で開く
+async function openUpdateModal(id, repeatType){
+  resetForm();
+  const repeatSelect = document.querySelector('select[name="repeat"]');
+  repeatSelect.disabled = true;
+  repeatSelect.value = repeatType;
+  updateRepeatUI(repeatType);
+  form.dataset.mode = 'edit';
+  form.dataset.taskId = Number(id);
   titleEl.textContent = 'タスクを編集';
-  if (submitBtn) submitBtn.textContent = '更新';
+  
+  //タスク取得
+  const storeName = selectStoreName(repeatType);
+  const task = await getItemById(id, storeName);
 
-  try {
-    // Repositoryから単体取得（今回追加するAPI）
-    const t = await getTaskById(Number(taskId));
-    if (t) {
-      formEl.elements.title.value     = t.title     || '';
-      formEl.elements.startTime.value = t.startTime || '';
-      formEl.elements.endTime.value   = t.endTime   || '';
-      formEl.elements.deadline.value  = t.deadline  || '';
-      formEl.elements.notes.value     = t.notes     || '';
-    }
-  } catch (e) {
-    errorBox.textContent = 'タスクの取得に失敗しました。';
+  if (!task) {
+    alert("対象のタスクが見つかりませんでした");
+    return;
   }
-  showModal();
+
+  // タスクをフォームに登録
+  form.elements.title.value     = task.title || "";
+  form.elements.startTime.value = task.startTime || "";
+  form.elements.endTime.value   = task.endTime || "";
+  form.elements.notes.value     = task.notes || "";
+
+  if (repeatType === "none") {
+    form.elements.deadline.value = task.deadline || "";
+  } else if (repeatType === "weekly") {
+    form.elements.weekday.value        = task.weekday || "";
+    form.elements.weeklyDeadline.value = task.deadline || "";
+  } else if (repeatType === "monthly") {
+    form.elements.monthlyStart.value    = task.startDay || "";
+    form.elements.monthlyDeadline.value = task.deadline || "";
+  }
+
+  document.getElementById("task-submit").textContent = "変更する";
+
+  modal.classList.add("is-active");
+  modal.setAttribute("aria-hidden", "false");
 }
 
+//フォーム内の初期化
+function resetForm() {
+  form.reset();
+}
+
+//////////////////////////////////////////////////////////
+//非表示処理
+closeButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    closeForm();
+  });
+})
+
+function closeForm(){
+  modal.classList.remove("is-active");
+  modal.setAttribute("aria-hidden", "true");
+}
+
+//////////////////////////////////////////////////////////
+//プルダウン選択変更があったとき
+const repeatSelect = document.querySelector('select[name="repeat"]');
+repeatSelect.addEventListener("change", (e) => {
+  const repeatType = e.target.value;
+  updateRepeatUI(repeatType);
+})
+
+//////////////////////////////////////////////////////////
+function updateRepeatUI(repeatType){
+  UiReset();
+  if (repeatType === "none"){
+    UiRepeatNone();
+  } else if(repeatType === "daily"){
+    UiRepeatDaily();
+  } else if(repeatType === "weekly"){
+    UiRepeatWeekly();
+  } else if(repeatType === "monthly"){
+    UiRepeatMonthly();
+  }
+}
+
+//フォームの要素をすべて非表示
+function UiReset(){
+  document.getElementById("weekday").classList.add("hidden");
+  document.getElementById("start-day").classList.add("hidden");
+  document.getElementById("time-row").classList.add("hidden");
+  document.getElementById("deadline").classList.add("hidden");
+  document.getElementById("weekly-deadline").classList.add("hidden");
+  document.getElementById("monthly-deadline").classList.add("hidden");
+}
+
+function UiRepeatNone(){
+  document.getElementById("time-row").classList.remove("hidden");
+  document.getElementById("deadline").classList.remove("hidden");
+}
+
+function UiRepeatDaily(){
+  document.getElementById("time-row").classList.remove("hidden");
+}
+
+function UiRepeatWeekly(){
+  document.getElementById("weekday").classList.remove("hidden");
+  document.getElementById("time-row").classList.remove("hidden");
+  document.getElementById("weekly-deadline").classList.remove("hidden");
+}
+
+function UiRepeatMonthly(){
+  document.getElementById("start-day").classList.remove("hidden");
+  document.getElementById("time-row").classList.remove("hidden");
+  document.getElementById("monthly-deadline").classList.remove("hidden");
+}
+
+//////////////////////////////////////////////////////////
 // ---- 送信（追加/更新を分岐）----
-formEl.addEventListener('submit', async (e)=>{
+form.addEventListener('submit', async (e)=>{
   e.preventDefault();
   errorBox.textContent = '';
-
-  const values = {
-    title:     formEl.elements.title.value.trim(),
-    startTime: formEl.elements.startTime.value,
-    endTime:   formEl.elements.endTime.value,
-    deadline:  formEl.elements.deadline.value,
-    notes:     formEl.elements.notes.value.trim()
-  };
-
+  
+  const repeatType = document.querySelector('select[name="repeat"]').value;
+  const values = createValues(repeatType);//繰り返しに応じた項目をセット
+  
   // ざっくりバリデーション
   if (!values.title || values.title.length < 2) {
     errorBox.textContent = 'タスク名は2文字以上で入力してください。';
@@ -93,35 +160,62 @@ formEl.addEventListener('submit', async (e)=>{
     errorBox.textContent = '終了時間は開始時間より後にしてください。';
     return;
   }
-  const todayStr = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD
-  if (values.deadline && values.deadline < todayStr) {
-    errorBox.textContent = '過去日を期限に設定できません。';
-    return;
-  }
 
+  const storeName = selectStoreName(repeatType);
+  
   try {
-    const mode = formEl.dataset.mode || 'add';
-    if (mode === 'edit') {
-      const id = Number(formEl.dataset.taskId);
-      await editTask(id, values);    // 既存API名に合わせる
+    const mode = form.dataset.mode || 'add';
+    console.log(mode);
+    if (mode === "edit") {
+      const id = Number(form.dataset.taskId);
+      await editItem(id, values, storeName);
+      alert('タスクを編集しました。');
     } else {
-      await addTask(values);         // 既存API名に合わせる
+      await addItem(storeName, values);
+      alert('タスクを保存しました。');
     }
   } catch (err) {
     alert('保存に失敗しました。もう一度お試しください。');
     return;
   }
 
-  hideModal();
-  // index.js 側の再描画（グローバル公開を想定）
-  if (typeof window.refreshTasks === 'function') {
-    window.refreshTasks();
-  }
+  closeForm();
+  refreshTasks();
+ 
 });
 
-// 追加ボタン → 追加モーダル
-document.getElementById('add-task')?.addEventListener('click', openAddModal);
+function createValues(repeatType){
+  //共通
+  const values = {
+    title:     form.elements.title.value.trim(),
+    startTime: form.elements.startTime.value,
+    endTime:   form.elements.endTime.value,
+    notes:     form.elements.notes.value.trim(),
+    status:    false //TODOロジックで表示調整する（週次・月次）
+  }
+  //個別
+  if (repeatType === "none") {
+    values.deadline = form.elements.deadline.value;
+  } else if (repeatType === "daily") {
+    // daily は特別な追加項目なし
+  } else if (repeatType === "weekly") {
+    values.weekday  = form.elements.weekday.value;
+    values.deadline = form.elements.weeklyDeadline.value;
+  } else if (repeatType === "monthly") {
+    values.startDay = form.elements.monthlyStart.value;
+    values.deadline = form.elements.monthlyDeadline.value;
+  }
+  return values;
+}
 
-// グローバルからも呼べるように（index.js のイベント委譲から使う）
-window.openEditModal = openEditModal;
-window.openAddModal  = openAddModal;
+function selectStoreName(repeatType) {
+  if (repeatType === "none") {
+    return "tasks";
+  } else if (repeatType === "daily") {
+    return "dailyTasks";
+  } else if (repeatType === "weekly") {
+    return "weeklyTasks";
+  } else if (repeatType === "monthly") {
+    return "monthlyTasks";
+  }
+}
