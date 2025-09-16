@@ -34,13 +34,15 @@
 .modal__content {
   position: relative;
   background: #fff;
-  width: 90%;
+  width: 600px;
   max-width: 500px;
+  max-height: 80vh;
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.25);
   z-index: 1;
   animation: fadeIn .2s ease;
+  overflow-y: auto;
 }
 
 /* ======================
@@ -84,7 +86,8 @@
 }
 
 .modal__form input,
-.modal__form textarea {
+.modal__form textarea
+.modal__form select {
   padding: 6px 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -92,10 +95,13 @@
   font-size: 14px;
 }
 
-.grid-3 {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+.time-row {
+  display: flex;
+  gap: 12px;
+}
+
+.time-row label {
+  flex: 1;
 }
 
 .form-error {
@@ -124,4 +130,22 @@
 @keyframes fadeIn {
   from { opacity: 0; transform: scale(0.95); }
   to   { opacity: 1; transform: scale(1); }
+}
+
+.modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px; /* 余白を確保 */
+}
+
+.repeat-label {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hidden {
+  display: none !important;
 }
