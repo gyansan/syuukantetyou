@@ -45,8 +45,6 @@ taskTableBody.addEventListener("click", (e) => {
   // 編集ボタンが押された場合
   if (e.target.matches('[data-action="edit"]')) {
     const row = e.target.closest("tr"); 
-    console.log("編集ボタン:", row);
-    //TODO taskForm側に実装した関数
     openUpdateModal(row.dataset.id, "daily")
   }
   // 削除ボタンが押された場合

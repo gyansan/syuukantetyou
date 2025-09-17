@@ -78,7 +78,6 @@ taskTableBody.addEventListener("click", async (e) => {
 
   // 完了ボタン
   if (e.target.closest('button[data-action="complete"]')) {
-    console.log("こことオタ");
     try {
       const storeName = selectStoreName(repeatType);
       await completeItem(originId, storeName);

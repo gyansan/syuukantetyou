@@ -167,7 +167,6 @@ form.addEventListener('submit', async (e)=>{
   
   try {
     const mode = form.dataset.mode || 'add';
-    console.log(mode);
     if (mode === "edit") {
       const id = Number(form.dataset.taskId);
       await editItem(id, values, storeName);
