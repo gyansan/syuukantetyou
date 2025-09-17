@@ -15,7 +15,8 @@
 <body>
   <!-- ナビバー -->
   <div class="sidebar">
-    <h2>メニュー</h2>
+    <h2 class="menu-title">メニュー</h2>
+    <button class="menu-toggle">☰ メニュー</button>
     <ul>
       <li><a href="index.html">今日のタスク</a></li>
       <li><a href="dailyTask.html">毎日のタスク</a></li>
@@ -43,12 +44,13 @@
   <!-- 行テンプレート -->
   <template id="task-row-template">
     <tr>
-      <td class="cell-task"></td>
-      <td class="cell-start"></td>
-      <td class="cell-end"></td>
-      <td>
+      <td class="cell-task" data-label="タスク"></td>
+      <td class="cell-start" data-label="開始"></td>
+      <td class="cell-end" data-label="終了"></td>
+      <td data-label="操作">
         <button class="btn btn-sm" data-action="edit">編集</button>
         <button class="btn btn-sm" data-action="delete">削除</button>
+        <button class="btn btn-sm" data-action="note">メモ</button>
       </td>
     </tr>
   </template>
@@ -203,9 +205,19 @@
     </div>
   </div>
 
+  <!-- メモモーダル -->
+  <div id="noteModal" class="note-modal">
+    <div class="note-modal-content">
+      <span class="note-modal-close">&times;</span>
+      <h3>メモ</h3>
+      <div id="noteContent"></div>
+    </div>
+  </div>
+
   <script src="./js/taskRepository.js"></script>
   <script src="./js/taskForm.js"></script>
   <script src="./js/dailyTaskPage.js"></script>
+  <script src="./js/common.js"></script>
 
 </body>
 </html>

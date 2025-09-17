@@ -34,8 +34,8 @@
 .modal__content {
   position: relative;
   background: #fff;
-  width: 600px;
-  max-width: 500px;
+  width: 100%;          /* 画面幅いっぱい */
+  max-width: 600px;     /* 上限は600px（PC用） */
   max-height: 80vh;
   border-radius: 8px;
   padding: 20px;
@@ -88,6 +88,8 @@
 .modal__form input,
 .modal__form textarea
 .modal__form select {
+  width: 100%;
+  box-sizing: border-box; /* 枠内に収める */
   padding: 6px 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -148,4 +150,20 @@
 
 .hidden {
   display: none !important;
+}
+
+/* ======================
+   スマホ対応 (600px以下)
+   ====================== */
+@media (max-width: 600px) {
+  .modal  {
+    width: 97%; /* フォーム全体を画面に合わせる */
+  }
+
+  .modal__form input,
+  .modal__form textarea
+  .modal__form select {
+    width: 100%;          /* 入力欄はフル幅 */
+    box-sizing: border-box;
+  }
 }
