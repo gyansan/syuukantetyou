@@ -1,11 +1,30 @@
 
 
-body {
-  font-family: 'Noto Serif JP', serif;
+/* タイトル系 */
+h1, h2, h3, .modal__header h2 {
+  font-family: "Meiryo UI", "メイリオ", sans-serif;
+}
+
+/* ボタン系 */
+button, .btn {
+  font-family: "Meiryo UI", "メイリオ", sans-serif;
 }
 
 @media (max-width: 600px) {
   h1 {
     font-size: 20px;
   }
+}
+
+html, body {
+  max-width: 100%;
+  overflow-x: hidden; /* 横スクロールを強制的に消す */
+}
+
+.table-task, 
+.task-form, 
+.main, 
+.sidebar {
+  max-width: 100%;
+  box-sizing: border-box; /* パディングや枠を幅に含める */
 }
