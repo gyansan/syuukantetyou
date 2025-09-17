@@ -82,7 +82,7 @@
   flex-direction: column;
   gap: 4px;
   margin-bottom: 10px;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .modal__form input,
@@ -94,7 +94,7 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   font-family: inherit;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .time-row {
@@ -164,6 +164,22 @@
   .modal__form textarea
   .modal__form select {
     width: 100%;          /* 入力欄はフル幅 */
+    box-sizing: border-box;
+  }
+
+    .time-row {
+    display: flex;
+    flex-direction: column; /* ← 横並びを縦並びに */
+    gap: 10px;              /* 縦方向の間隔 */
+  }
+
+  .time-row label {
+    flex: none;   /* 横幅制御を外す */
+    width: 100%;  /* 全幅使う */
+  }
+
+  .time-row input {
+    width: 100%;  /* 入力欄も全幅 */
     box-sizing: border-box;
   }
 }
