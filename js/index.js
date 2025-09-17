@@ -140,8 +140,6 @@ async function resetForDate(date) {
   const day = date.getDate();      // 1〜31
   const lastDayOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
 
-  console.log(`→ ${date.toLocaleDateString()} の処理 (weekday=${weekday}, day=${day})`);
-
   // dailyTasks → 全部未完了に戻す
   const dailyTasks = await getAllItems("dailyTasks");
   for (const task of dailyTasks) {

@@ -121,7 +121,6 @@ async function deleteItem(id, storeName) {
 
 // IDでアイテムを取得
 async function getItemById(id, storeName) {
-  console.log("こことおた");
   const db = await dbPromise;
   const tx = db.transaction(storeName, "readonly");
   const store = tx.objectStore(storeName);

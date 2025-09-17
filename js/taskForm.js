@@ -21,10 +21,12 @@ addButton.addEventListener("click",()=>{
 function openAddForm(repeatType){
   resetForm();
   const repeatSelect = document.querySelector('select[name="repeat"]');
+  repeatSelect.disabled = false;
   repeatSelect.value = repeatType;
   updateRepeatUI(repeatType);
   form.dataset.mode = 'add';
   titleEl.textContent = 'タスクを追加';
+  document.getElementById("task-submit").textContent = "追加";
   modal.classList.add("is-active");
   modal.setAttribute("aria-hidden", "false");
 }
