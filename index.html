@@ -15,14 +15,15 @@
 <body>
   <!-- ナビバー -->
   <div class="sidebar">
-    <h2>メニュー</h2>
+    <h2 class="menu-title">メニュー</h2>   <!-- PC用 -->
+    <button class="menu-toggle">☰ メニュー</button> <!-- スマホ用 -->
     <ul>
-      <li><a href="/syuukantetyou/index.html">今日のタスク</a></li>
-      <li><a href="/syuukantetyou/dailyTask.html">毎日のタスク</a></li>
-      <li><a href="/syuukantetyou/weeklyTask.html">毎週のタスク</a></li>
-      <li><a href="/syuukantetyou/monthlyTask.html">毎月のタスク</a></li>
+      <li><a href="index.html">● 今日のタスク</a></li>
+      <li><a href="dailyTask.html">● 毎日のタスク</a></li>
+      <li><a href="weeklyTask.html">● 毎週のタスク</a></li>
+      <li><a href="monthlyTask.html">● 毎月のタスク</a></li>
     </ul>
-  </div>
+</div>
 
   <!-- メインコンテンツ -->
   <div class="main">
@@ -44,16 +45,19 @@
 <!-- 行テンプレート -->
 <template id="task-row-template">
   <tr>
-    <td class="cell-task"></td>
-    <td class="cell-start"></td>
-    <td class="cell-end"></td>
-    <td class="cell-deadline"></td>
-    <td>
+    <td class="cell-task tooltip-note" data-label="タスク"></td>
+    <td class="cell-start" data-label="開始"></td>
+    <td class="cell-end" data-label="終了"></td>
+    <td class="cell-deadline" data-label="期限"></td>
+    <td data-label="操作">
       <button class="btn btn-sm" data-action="edit">編集</button>
       <button class="btn btn-sm" data-action="complete">完了</button>
+      <button class="btn btn-sm" data-action="note">メモ</button>
     </td>
   </tr>
 </template>
+
+
 
     <!-- メッセージ表示エリア -->
     <div id="task-empty-message" class="empty-message" style="display:none;">
@@ -204,8 +208,19 @@
     </div>
   </div>
 
+  <!-- メモ用モーダル -->
+  <div id="note-modal" class="note-modal">
+    <div class="note-modal-content">
+      <span class="note-modal-close">&times;</span>
+      <h2>メモ</h2>
+      <p id="note-modal-text"></p>
+    </div>
+  </div>
+
+
   <script src="./js/taskRepository.js"></script>
   <script src="./js/index.js"></script>
   <script src="./js/taskForm.js"></script>
+  <script src="./js/common.js"></script>
 </body>
 </html>
