@@ -6,7 +6,6 @@
 }
 
 button.btn{
-  font-family: 'Noto Serif JP', serif;
   appearance: none;
   border: none;
   color: var(--btn-text);

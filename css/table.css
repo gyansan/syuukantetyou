@@ -71,6 +71,7 @@
     pointer-events: none;
     display: block;
   }
+
 }
 
 /* ---------------------------------
@@ -146,6 +147,17 @@
   /* スマホではメモボタンを表示 */
   .table-task [data-action="note"] {
     display: inline-block;
+  }
+
+  
+  /* 操作ボタンの間隔 */
+  .table-task td button {
+    margin-right: 4px;  /* ボタンの右側に余白 */
+    margin-bottom: 4px; /* 縦並びになった時の余白も確保 */
+  }
+
+  .table-task td button:last-child {
+    margin-right: 0; /* 最後のボタンだけ余白を消す */
   }
 }
 
