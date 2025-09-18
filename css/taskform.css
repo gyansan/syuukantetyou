@@ -86,7 +86,7 @@
 }
 
 .modal__form input,
-.modal__form textarea
+.modal__form textarea,
 .modal__form select {
   width: 100%;
   box-sizing: border-box; /* 枠内に収める */
@@ -161,10 +161,11 @@
   }
 
   .modal__form input,
-  .modal__form textarea
+  .modal__form textarea,
   .modal__form select {
     width: 100%;          /* 入力欄はフル幅 */
     box-sizing: border-box;
+    font-size: 14px;
   }
 
     .time-row {
@@ -175,11 +176,11 @@
 
   .time-row label {
     flex: none;   /* 横幅制御を外す */
-    width: 100%;  /* 全幅使う */
+    width: 60%;  /* 全幅使う */
   }
 
   .time-row input {
-    width: 100%;  /* 入力欄も全幅 */
+    width: 76%;  /* 入力欄も全幅 */
     box-sizing: border-box;
   }
 }
