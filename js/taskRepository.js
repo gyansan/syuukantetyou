@@ -92,15 +92,19 @@ async function completeItem(id, storeName){
   const db = await dbPromise;
   const tx = db.transaction(storeName, "readwrite");
   const store = tx.objectStore(storeName);
+
   const curr = await req(store.get(Number(id)));
   if (!curr) {
     tx.abort();
     throw new Error("NOT_FOUND");
   }
-  curr.status = true;
-  await req(store.put(curr));
+
+  const updated = { ...curr, status: true, id: Number(id) };
+
+  await req(store.put(updated)); 
   await txDone(tx);
-  return curr;
+
+  return updated;
 }
 
 // アイテムを削除

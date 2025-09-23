@@ -77,10 +77,11 @@ taskTableBody.addEventListener("click", async (e) => {
   const repeatType = row.dataset.repeatType;
 
   // 完了ボタン
-  if (e.target.closest('button[data-action="complete"]')) {
+  if (e.target.closest('button[data-action="complete"]')) {    
     try {
       const storeName = selectStoreName(repeatType);
-      await completeItem(originId, storeName);
+      await completeItem(originId, storeName); 
+      console.log(storeName+originId);
       await refreshTasks();
     } catch (err) {
       console.error("完了処理エラー:", err);
@@ -103,34 +104,33 @@ taskTableBody.addEventListener("click", async (e) => {
 //////////////////////////////////////////////////////////////////////
 // 更新処理
 async function updateTasks() {
-  
   const today = new Date();
-  const todayStr = today.toLocaleDateString("en-CA"); // YYYY-MM-DD
+  const todayStr = today.toISOString().slice(0,10); // YYYY-MM-DD
 
   // 最終更新日を取得
   let lastDateStr = await getLastUpdated();
-  let lastDate = lastDateStr ? new Date(lastDateStr) : null;
-  
-  if (lastDate === today){
-    return;
-  }
 
-  if (!lastDate) {
-    // 初回起動なら今日を保存して終了
+  // 初回起動なら今日を保存して終了
+  if (!lastDateStr) {
     await setLastUpdated(todayStr);
     console.log("初回起動: 今日を lastUpdated に設定");
     return;
   }
 
+  // もし同じ日なら何もしない
+  if (lastDateStr === todayStr) {
+    return;
+  }
+
   // 差分ループ（lastDate+1日 〜 今日まで）
-  while (lastDate < today) {
-    lastDate.setDate(lastDate.getDate() + 1); // 1日進める
+  let lastDate = new Date(lastDateStr);
+  while (lastDate.toISOString().slice(0,10) < todayStr) {
+    lastDate.setDate(lastDate.getDate() + 1);
     await resetForDate(lastDate);
   }
 
   // 最終更新日を更新
   await setLastUpdated(todayStr);
-
 }
 
 // 日ごとのリセット処理
