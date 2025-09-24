@@ -82,7 +82,7 @@
   flex-direction: column;
   gap: 4px;
   margin-bottom: 10px;
-  font-size: 16px;
+  font-size: 17px;
 }
 
 .modal__form input,
@@ -94,7 +94,7 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   font-family: inherit;
-  font-size: 16px;
+  font-size: 17px;
 }
 
 .time-row {
@@ -165,7 +165,7 @@
   .modal__form select {
     width: 100%;          /* 入力欄はフル幅 */
     box-sizing: border-box;
-    font-size: 14px;
+    font-size: 17px;
   }
 
     .time-row {
