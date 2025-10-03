@@ -31,11 +31,24 @@ async function refreshTasks() {
 
   const tasks = await createTodayTasks(); //当日タスクを生成（一番下に書きます）
 
-  tasks.sort((a, b) => 
-    a.deadline.localeCompare(b.deadline) ||
-    a.startTime.localeCompare(b.startTime) ||
-    a.endTime.localeCompare(b.endTime)
-  );
+tasks.sort((a, b) => {
+  // 期限なしは後ろへ
+  if (!a.deadline && b.deadline) return 1;
+  if (a.deadline && !b.deadline) return -1;
+
+  // 期限が両方ある場合は日付で比較
+  if (a.deadline && b.deadline) {
+    const cmp = a.deadline.localeCompare(b.deadline);
+    if (cmp !== 0) return cmp;
+  }
+
+  // 期限が同じなら開始時刻で比較
+  const cmpStart = (a.startTime || "").localeCompare(b.startTime || "");
+  if (cmpStart !== 0) return cmpStart;
+
+  // さらに終了時刻で比較
+  return (a.endTime || "").localeCompare(b.endTime || "");
+});
   renderTaskTable(tasks);
 }
 
