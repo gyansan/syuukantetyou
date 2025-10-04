@@ -116,9 +116,19 @@ taskTableBody.addEventListener("click", async (e) => {
 
 //////////////////////////////////////////////////////////////////////
 // 更新処理
+function getBaseDate(date = new Date()) {
+  // 03:00 を境に日付を決める
+  const base = new Date(date);
+  if (base.getHours() < 3) {
+    // まだ 03:00 になってない → 前日扱いにする
+    base.setDate(base.getDate() - 1);
+  }
+  // YYYY-MM-DD を返す
+  return base.toISOString().slice(0,10);
+}
 async function updateTasks() {
-  const today = new Date();
-  const todayStr = today.toISOString().slice(0,10); // YYYY-MM-DD
+  const now = new Date();
+  const todayStr = getBaseDate(now);
 
   // 最終更新日を取得
   let lastDateStr = await getLastUpdated();
